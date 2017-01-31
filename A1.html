@@ -1,0 +1,184 @@
+<html>
+
+<head>
+<style type="text/css">
+.knitr .inline {
+  background-color: #f7f7f7;
+  border:solid 1px #B0B0B0;
+}
+.error {
+	font-weight: bold;
+	color: #FF0000;
+}
+.warning {
+	font-weight: bold;
+}
+.message {
+	font-style: italic;
+}
+.source, .output, .warning, .error, .message {
+	padding: 0 1em;
+  border:solid 1px #F7F7F7;
+}
+.source {
+  background-color: #f5f5f5;
+}
+.rimage .left {
+  text-align: left;
+}
+.rimage .right {
+  text-align: right;
+}
+.rimage .center {
+  text-align: center;
+}
+.hl.num {
+  color: #AF0F91;
+}
+.hl.str {
+  color: #317ECC;
+}
+.hl.com {
+  color: #AD95AF;
+  font-style: italic;
+}
+.hl.opt {
+  color: #000000;
+}
+.hl.std {
+  color: #585858;
+}
+.hl.kwa {
+  color: #295F94;
+  font-weight: bold;
+}
+.hl.kwb {
+  color: #B05A65;
+}
+.hl.kwc {
+  color: #55aa55;
+}
+.hl.kwd {
+  color: #BC5A65;
+  font-weight: bold;
+}
+</style>
+<title>Assignment 1</title>
+</head>
+
+<body>
+
+
+
+<div class="chunk" id="unnamed-chunk-1"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl kwd">library</span><span class="hl std">(ggplot2)</span>
+<span class="hl kwd">setwd</span><span class="hl std">(</span><span class="hl str">&quot;C:\\Users\\RAJAAB\\Downloads&quot;</span><span class="hl std">)</span>
+<span class="hl std">activityData</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">read.csv</span><span class="hl std">(</span><span class="hl str">'activity.csv'</span><span class="hl std">)</span>
+</pre></div>
+</div></div>
+
+<p>What is mean total number of steps taken per day?</p>
+
+<div class="chunk" id="unnamed-chunk-2"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl std">stepsByDay</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">tapply</span><span class="hl std">(activityData</span><span class="hl opt">$</span><span class="hl std">steps, activityData</span><span class="hl opt">$</span><span class="hl std">date, sum,</span> <span class="hl kwc">na.rm</span><span class="hl std">=</span><span class="hl num">TRUE</span><span class="hl std">)</span>
+</pre></div>
+</div></div>
+
+<p>Make a histogram of the total number of steps taken each day</p>
+
+<div class="chunk" id="unnamed-chunk-3"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl kwd">qplot</span><span class="hl std">(stepsByDay,</span> <span class="hl kwc">xlab</span><span class="hl std">=</span><span class="hl str">'Total steps per day'</span><span class="hl std">,</span> <span class="hl kwc">ylab</span><span class="hl std">=</span><span class="hl str">'Frequency using binwith 500'</span><span class="hl std">,</span> <span class="hl kwc">binwidth</span><span class="hl std">=</span><span class="hl num">500</span><span class="hl std">)</span>
+</pre></div>
+</div><div class="rimage default"><img src="figure/unnamed-chunk-3-1.png" title="plot of chunk unnamed-chunk-3" alt="plot of chunk unnamed-chunk-3" class="plot" /></div></div>
+
+<p>2. Calculate and report the mean and median total number of steps taken per day</p>
+
+<div class="chunk" id="unnamed-chunk-4"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl std">stepsByDayMean</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">mean</span><span class="hl std">(stepsByDay)</span>
+<span class="hl std">stepsByDayMedian</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">median</span><span class="hl std">(stepsByDay)</span>
+</pre></div>
+</div></div>
+
+
+<p>What is the average daily activity pattern?</p>
+<div class="chunk" id="unnamed-chunk-5"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl std">averageStepsPerTimeBlock</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">aggregate</span><span class="hl std">(</span><span class="hl kwc">x</span><span class="hl std">=</span><span class="hl kwd">list</span><span class="hl std">(</span><span class="hl kwc">meanSteps</span><span class="hl std">=activityData</span><span class="hl opt">$</span><span class="hl std">steps),</span> <span class="hl kwc">by</span><span class="hl std">=</span><span class="hl kwd">list</span><span class="hl std">(</span><span class="hl kwc">interval</span><span class="hl std">=activityData</span><span class="hl opt">$</span><span class="hl std">interval),</span> <span class="hl kwc">FUN</span><span class="hl std">=mean,</span> <span class="hl kwc">na.rm</span><span class="hl std">=</span><span class="hl num">TRUE</span><span class="hl std">)</span>
+</pre></div>
+</div></div>
+
+
+<p>1. Make a time series plot</p>
+<div class="chunk" id="unnamed-chunk-6"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl kwd">ggplot</span><span class="hl std">(</span><span class="hl kwc">data</span><span class="hl std">=averageStepsPerTimeBlock,</span> <span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">x</span><span class="hl std">=interval,</span> <span class="hl kwc">y</span><span class="hl std">=meanSteps))</span> <span class="hl opt">+</span>
+  <span class="hl kwd">geom_line</span><span class="hl std">()</span> <span class="hl opt">+</span>
+  <span class="hl kwd">xlab</span><span class="hl std">(</span><span class="hl str">&quot;5-minute interval&quot;</span><span class="hl std">)</span> <span class="hl opt">+</span>
+  <span class="hl kwd">ylab</span><span class="hl std">(</span><span class="hl str">&quot;average number of steps taken&quot;</span><span class="hl std">)</span>
+</pre></div>
+</div><div class="rimage default"><img src="figure/unnamed-chunk-6-1.png" title="plot of chunk unnamed-chunk-6" alt="plot of chunk unnamed-chunk-6" class="plot" /></div></div>
+
+<p>2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?</p>
+<div class="chunk" id="unnamed-chunk-7"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl std">mostSteps</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">which.max</span><span class="hl std">(averageStepsPerTimeBlock</span><span class="hl opt">$</span><span class="hl std">meanSteps)</span>
+<span class="hl std">timeMostSteps</span> <span class="hl kwb">&lt;-</span>  <span class="hl kwd">gsub</span><span class="hl std">(</span><span class="hl str">&quot;([0-9]{1,2})([0-9]{2})&quot;</span><span class="hl std">,</span> <span class="hl str">&quot;\\1:\\2&quot;</span><span class="hl std">, averageStepsPerTimeBlock[mostSteps,</span><span class="hl str">'interval'</span><span class="hl std">])</span>
+</pre></div>
+</div></div>
+
+
+<p>Imputing missing values</p>
+<p>1. Calculate and report the total number of missing values in the dataset</p>
+
+<div class="chunk" id="unnamed-chunk-8"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl std">numMissingValues</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">length</span><span class="hl std">(</span><span class="hl kwd">which</span><span class="hl std">(</span><span class="hl kwd">is.na</span><span class="hl std">(activityData</span><span class="hl opt">$</span><span class="hl std">steps)))</span>
+</pre></div>
+</div></div>
+
+<p>2. Devise a strategy for filling in all of the missing values in the dataset.
+3. Create a new dataset that is equal to the original dataset but with the missing data filled in.
+</p>
+<div class="chunk" id="unnamed-chunk-9"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl kwd">library</span><span class="hl std">(Hmisc)</span>
+</pre></div>
+<div class="message"><pre class="knitr r">## Loading required package: lattice
+</pre></div>
+<div class="message"><pre class="knitr r">## Loading required package: survival
+</pre></div>
+<div class="message"><pre class="knitr r">## Loading required package: Formula
+</pre></div>
+<div class="message"><pre class="knitr r">## 
+## Attaching package: 'Hmisc'
+</pre></div>
+<div class="message"><pre class="knitr r">## The following objects are masked from 'package:base':
+## 
+##     format.pval, round.POSIXt, trunc.POSIXt, units
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl std">activityDataImputed</span> <span class="hl kwb">&lt;-</span> <span class="hl std">activityData</span>
+<span class="hl std">activityDataImputed</span><span class="hl opt">$</span><span class="hl std">steps</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">impute</span><span class="hl std">(activityData</span><span class="hl opt">$</span><span class="hl std">steps,</span> <span class="hl kwc">fun</span><span class="hl std">=mean)</span>
+</pre></div>
+</div></div>
+
+<p>4. Make a histogram of the total number of steps taken each day</p>
+<div class="chunk" id="unnamed-chunk-10"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl std">stepsByDayImputed</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">tapply</span><span class="hl std">(activityDataImputed</span><span class="hl opt">$</span><span class="hl std">steps, activityDataImputed</span><span class="hl opt">$</span><span class="hl std">date, sum)</span>
+<span class="hl kwd">qplot</span><span class="hl std">(stepsByDayImputed,</span> <span class="hl kwc">xlab</span><span class="hl std">=</span><span class="hl str">'Total steps per day (Imputed)'</span><span class="hl std">,</span> <span class="hl kwc">ylab</span><span class="hl std">=</span><span class="hl str">'Frequency using binwith 500'</span><span class="hl std">,</span> <span class="hl kwc">binwidth</span><span class="hl std">=</span><span class="hl num">500</span><span class="hl std">)</span>
+</pre></div>
+</div><div class="rimage default"><img src="figure/unnamed-chunk-10-1.png" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" class="plot" /></div></div>
+
+<p>... and Calculate and report the mean and median total number of steps taken per day.</p>
+
+<div class="chunk" id="unnamed-chunk-11"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl std">stepsByDayMeanImputed</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">mean</span><span class="hl std">(stepsByDayImputed)</span>
+<span class="hl std">stepsByDayMedianImputed</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">median</span><span class="hl std">(stepsByDayImputed)</span>
+</pre></div>
+</div></div>
+
+<p>Are there differences in activity patterns between weekdays and weekends?
+
+1. Create a new factor variable in the dataset with two levels - "weekday" and "weekend" indicating whether a given date is a weekday or weekend day.
+</p>
+
+<div class="chunk" id="unnamed-chunk-12"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl std">activityDataImputed</span><span class="hl opt">$</span><span class="hl std">dateType</span> <span class="hl kwb">&lt;-</span>  <span class="hl kwd">ifelse</span><span class="hl std">(</span><span class="hl kwd">as.POSIXlt</span><span class="hl std">(activityDataImputed</span><span class="hl opt">$</span><span class="hl std">date)</span><span class="hl opt">$</span><span class="hl std">wday</span> <span class="hl opt">%in%</span> <span class="hl kwd">c</span><span class="hl std">(</span><span class="hl num">0</span><span class="hl std">,</span><span class="hl num">6</span><span class="hl std">),</span> <span class="hl str">'weekend'</span><span class="hl std">,</span> <span class="hl str">'weekday'</span><span class="hl std">)</span>
+</pre></div>
+</div></div>
+
+<p>2. Make a panel plot containing a time series plot</p>
+<div class="chunk" id="unnamed-chunk-13"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl std">averagedActivityDataImputed</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">aggregate</span><span class="hl std">(steps</span> <span class="hl opt">~</span> <span class="hl std">interval</span> <span class="hl opt">+</span> <span class="hl std">dateType,</span> <span class="hl kwc">data</span><span class="hl std">=activityDataImputed, mean)</span>
+<span class="hl kwd">ggplot</span><span class="hl std">(averagedActivityDataImputed,</span> <span class="hl kwd">aes</span><span class="hl std">(interval, steps))</span> <span class="hl opt">+</span>
+  <span class="hl kwd">geom_line</span><span class="hl std">()</span> <span class="hl opt">+</span>
+  <span class="hl kwd">facet_grid</span><span class="hl std">(dateType</span> <span class="hl opt">~</span> <span class="hl std">.)</span> <span class="hl opt">+</span>
+  <span class="hl kwd">xlab</span><span class="hl std">(</span><span class="hl str">&quot;5-minute interval&quot;</span><span class="hl std">)</span> <span class="hl opt">+</span>
+  <span class="hl kwd">ylab</span><span class="hl std">(</span><span class="hl str">&quot;avarage number of steps&quot;</span><span class="hl std">)</span>
+</pre></div>
+</div><div class="rimage default"><img src="figure/unnamed-chunk-13-1.png" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" class="plot" /></div></div>
+
+
+</body>
+</html>
